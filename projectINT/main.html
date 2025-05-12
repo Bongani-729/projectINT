@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Residence Finder</title>
+  <style>
+    /* Your existing styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .header {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 2rem;
+      font-weight: bold;
+      background-color: #003366;
+      color: white;
+    }
+
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .residence-img {
+      width: 300px;
+      height: 200px;
+      background-color: #ccc;
+      background-size: cover;
+      background-position: center;
+      border-radius: 10px;
+    }
+
+    .search-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 2rem 1rem;
+      gap: 1rem;
+    }
+
+    .search-input {
+      padding: 0.8rem 1rem;
+      width: 60%;
+      border-radius: 20px;
+      border: 1px solid #aaa;
+      font-size: 1rem;
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filter-bar button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 20px;
+      background-color: #eee;
+      cursor: pointer;
+    }
+
+    .filter-bar button:hover {
+      background-color: #ddd;
+    }
+
+    .residence-options {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin: 2rem;
+    }
+
+    .res-card {
+      width: 200px;
+      height: 150px;
+      background-color: #eee;
+      border-radius: 10px;
+      text-align: center;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 1rem;
+      font-weight: bold;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .search-button {
+      background-color: #003366;
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 25px;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+    }
+
+    .search-button:hover {
+      background-color: #002244;
+    }
+
+    .caption-section {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .caption-section h2 {
+      color: #003366;
+    }
+
+    .caption-section p {
+      font-size: 1rem;
+      color: #444;
+    }
+
+    .footer {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 1.5rem 1rem;
+      margin-top: 2rem;
+    }
+
+    .footer small {
+      color: #ccc;
+    }
+
+    /* New dynamic card styling */
+    .res-card-dynamic {
+      background-color: #f4f4f4;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 250px;
+      margin: 10px;
+      text-align: center;
+      box-sizing: border-box;
+    }
+
+    .res-card-dynamic h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .res-card-dynamic p {
+      margin: 0.3rem 0;
+    }
+
+    /* Pop-up styles */
+    #residences-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      border-radius: 8px;
+    }
+
+    #residences-popup h3 {
+      margin-top: 0;
+      color: #003366;
+      margin-bottom: 1rem;
+    }
+
+    #residences-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    #residences-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    #residences-list li:last-child {
+      border-bottom: none;
+    }
+
+    #popup-close-btn {
+      background-color: #ddd;
+      color: #333;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    #popup-close-btn:hover {
+      background-color: #ccc;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">Student Residence Finder</div>
+
+  <div class="hero">
+    <div onclick="window.location.href='Building54.html';" class="residence-img" style="background-image: url('eMalahleni.jpg');"></div>
+    <div onclick="window.location.href='corridorHill.php';" class="residence-img" style="background-image: url('corridor.jpg');"></div>
+    <div onclick="window.location.href='mapSearch.html';" class="residence-img" style="background-image: url('khayalethu.png');"></div>
+    <div class="residence-img" style="background-image: url('private1.jpg');"></div>
+  </div>
+
+  <div class="search-section">
+    <input type="text" class="search-input" id="search-term" placeholder="Search available residences..." />
+
+    <div class="filter-bar">
+      <button onclick="loadAndShowResidences()">All Residences</button>
+      <button onclick="window.location.href='Building54.html';">Building 54</button>
+      <button onclick="window.location.href='corridorHill.php';">Corridor Hill</button>
+      <button onclick="window.location.href='khayalethu.php';">Khayalethu</button>
+      <button onclick="searchRoomFees()">R1000 - R5000</button>
+      <button onclick="window.location.href='private.html';">private accommodation</button>
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+      <button class="search-button" onclick="searchResidenceMaps()">Search Maps</button>
+      <button class="search-button" onclick="window.location.href='createProfile1.php';">Login</button>
+    </div>
+  </div>
+  <div id="residence-data" class="residence-data" style="display: none;"></div> <div class="residence-options">
+    <div onclick="window.location.href='Building54.html';" class="res-card"><img src="eMalahleni.jpg" alt="Building 54 Residence" style="width: 100%; height: 100%; border-radius: 10px;"></div>
+    <div onclick="window.location.href='corridorHill.php';" class="res-card"><img src="corridor.jpg" alt="corridor Hill" style="width: 100%; height: 100%; border-radius: 10px;"></div>
+    <div class="res-card"><img src="khayalethu.png" alt="khayalethu Residence" style="width: 100%; height: 100%; border-radius: 10px;"></div>
+  </div>
+
+  <div class="caption-section">
+    <h2>Find Your Perfect Student Home</h2>
+    <p>Browse student residences located near campus, offering affordable, modern, and secure living spaces. Whether you want a quiet study environment or a vibrant social setting, we’ve got options to match your lifestyle.</p>
+
+    <h2>Compare & Choose</h2>
+    <p>Use our search and filter tools to compare residences based on price, amenities, room type, and distance. Save your favorites, and even book a virtual tour with just one click.</p>
+
+    <h2>Need Help?</h2>
+    <p>Contact our support team or visit our <a href="#">FAQ page</a> for common questions and residence policies.</p>
+  </div>
+
+  <div class="search-section">
+    <button class="search-button" onclick="loadAndShowResidences()">Show All Residences & Availability</button>
+  </div>
+
+  <div id="residence-data" class="residence-data" style="display: none;"></div> <div id="residences-popup">
+    <h3>Available Residences</h3>
+    <ul id="residences-list">
+      </ul>
+    <button id="popup-close-btn" onclick="closePopup()">Close</button>
+  </div>
+
+  <div id="overlay"></div>
+
+  <script>
+    async function loadAndShowResidences() {
+      try {
+        const response = await fetch('get_residences.php');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+
+        const residencesList = document.getElementById('residences-list');
+        residencesList.innerHTML = ''; // Clear previous content
+
+        if (data.length === 0) {
+          residencesList.innerHTML = '<li>No residences found.</li>';
+        } else {
+          data.forEach(res => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+              <strong>${res.residence_name}</strong><br>
+              Available Rooms: ${res.total_available} / Total: ${res.total_unavailable}
+            `;
+            residencesList.appendChild(listItem);
+          });
+        }
+
+        // Show the pop-up and overlay
+        document.querySelector('#residences-popup h3').textContent = 'Available Residences';
+        document.getElementById('residences-popup').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+
+      } catch (error) {
+        console.error('Error loading residences:', error);
+        alert('Failed to load residences.');
+      }
+    }
+
+    async function searchRoomFees() {
+      try {
+        const response = await fetch('get_residences.php');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+
+        // Filter residences with fees between R1000 and R5000 (inclusive)
+        const filteredResidences = data.filter(res => res.room_fee >= 1000 && res.room_fee <= 5000);
+
+        if (filteredResidences.length === 0) {
+          alert('No residences found within the specified price range.');
+          return;
+        }
+
+        // For simplicity, let's redirect to a new page to display the fees.
+        // You can modify this to display within the popup if you prefer.
+        const residenceNames = filteredResidences.map(res => res.residence_name).join(',');
+        window.location.href = `residence_fees.html?residences=${residenceNames}`;
+
+      } catch (error) {
+        console.error('Error loading residence data:', error);
+        alert('Failed to load residence data.');
+      }
+    }
+
+    async function searchResidenceMaps() {
+      const searchTerm = document.getElementById('search-term').value.toLowerCase();
+      try {
+        const response = await fetch('get_residences.php');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+
+        const residencesList = document.getElementById('residences-list');
+        residencesList.innerHTML = ''; // Clear previous content
+        document.querySelector('#residences-popup h3').textContent = 'Residence Maps'; // Set the title
+
+        const filteredResidences = data.filter(res =>
+          res.residence_name.toLowerCase().includes(searchTerm)
+        );
+
+        if (filteredResidences.length === 0) {
+          residencesList.innerHTML = '<li>No residences found for your search term.</li>';
+        } else {
+          filteredResidences.forEach(res => {
+            const listItem = document.createElement('li');
+            const mapSearchUrl = `https://www.google.com/maps/search/?api=1&query=$${encodeURIComponent(res.residence_name)} eMalahleni`;
+            listItem.innerHTML = `
+              <strong>${res.residence_name} Map</strong><br>
+              <iframe
+                width="400"
+                height="300"
+                style="border:0;"
+                loading="lazy"
+                allowfullscreen
+                src="${mapSearchUrl}" referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+            `;
+            residencesList.appendChild(listItem);
+          });
+        }
+
+        // Show the pop-up and overlay
+        document.getElementById('residences-popup').style.display = 'block';
+        document.getElementById('overlay').style.display = 'block';
+
+      } catch (error) {
+        console.error('Error loading residence maps:', error);
+        alert('Failed to load residence maps.');
+      }
+    }
+
+    function closePopup() {
+      document.getElementById('residences-popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+      document.querySelector('#residences-popup h3').textContent = 'Available Residences';
+    }
+  </script>
+
+</body>
+</html>
