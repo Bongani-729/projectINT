@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Building 54 Residence</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .header {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 2rem;
+      font-weight: bold;
+      background-color: #003366;
+      color: white;
+    }
+
+    .residence-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .residence-img {
+      width: 300px;
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .info-section {
+      max-width: 800px;
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin: 2rem auto;
+    }
+
+    .info-section h2, .info-section h3 {
+      color: #003366;
+    }
+
+    .info-section ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+    }
+
+    button {
+      background-color: #003366;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0.5rem;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00509e;
+    }
+
+    iframe {
+      display: block;
+      margin: 2rem auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .footer {
+      background-color: #003366;
+      color: white;
+      text-align: center;
+      padding: 1.5rem 1rem;
+      margin-top: 2rem;
+    }
+
+    .footer small {
+      color: #ccc;
+    }
+
+    #room-info {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    input, select {
+      display: block;
+      width: 100%;
+      max-width: 400px;
+      margin: 0.5rem auto;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">Building 54 Residence</div>
+
+  <div class="residence-hero">
+    <div class="residence-img" style="background-image: url('eMalahleni.jpg');"></div>
+  </div>
+
+  <div class="info-section">
+    <p><strong>Building 54</strong> is an official <strong>Tshwane University of Technology (TUT)</strong> on-campus residence. It exclusively accommodates students registered at TUT.</p>
+
+    <h3>Accommodation Details:</h3>
+    <ul>
+      <li><strong>Sharing (Double) Room</strong>: R40,000 per year</li>
+      <li><strong>Non-Sharing (Single) Room</strong>: R50,000 per year</li>
+    </ul>
+
+    <h3>Residence Rules and Requirements:</h3>
+    <ul>
+      <li>Only <strong>bar fridges</strong> are permitted (no full-size fridges).</li>
+      <li><strong>Microwaves</strong> are allowed.</li>
+    </ul>
+
+    <h3>Residence Capacity:</h3>
+    <ul>
+      <li><strong>Total Students Housed</strong>: 172</li>
+      <li><strong>Male Students</strong>: 85</li>
+      <li><strong>Female Students</strong>: 86</li>
+    </ul>
+
+    <p>Building 54 offers a safe, academically conducive environment tailored to the needs of TUT students.</p>
+
+    <div id="booking-form">
+      <h3>Book Your Room</h3>
+      <form id="room-booking-form">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="email" id="email" placeholder="Email Address" required>
+        <select id="room-type" required>
+          <option value="male">Male Room</option>
+          <option value="female">Female Room</option>
+        </select>
+        <button type="submit">Reserve Room</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="room-info" class="info-section">
+    <h3>Live Room Availability:</h3>
+    <ul>
+      <li>Total Available: <span id="total"></span></li>
+      <li>Male Rooms: <span id="male"></span></li>
+      <li>Female Rooms: <span id="female"></span></li>
+      <li>Unavailable: <span id="unavailable"></span></li>
+    </ul>
+    <button onclick="book('male')">Book Male Room</button>
+    <button onclick="book('female')">Book Female Room</button>
+  </div>
+
+  <script>
+    function fetchRooms() {
+      fetch('get_rooms.php?residence=Building 54')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('total').innerText = data.total_available;
+          document.getElementById('male').innerText = data.male_available;
+          document.getElementById('female').innerText = data.female_available;
+          document.getElementById('unavailable').innerText = data.total_unavailable;
+        });
+    }
+
+    function book(type) {
+      fetch('book_room.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `type=${type}&residence=Building 54`
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          alert(`Success! Room booked.\nBooking date: ${data.currentDate}\nReserved until: ${data.checkoutDate} 10am`);
+          fetchRooms();
+        } else {
+          alert(data.message);
+        }
+      });
+    }
+
+    document.getElementById('room-booking-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var name = document.getElementById('name').value;
+      var email = document.getElementById('email').value;
+      var type = document.getElementById('room-type').value;
+
+      fetch('book_room.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `name=${name}&email=${email}&type=${type}&residence=Building 54`
+      })
+      .then(response => response.json())
+      .then(data => {
+    console.log(data); // This will log the full response from PHP
+    if (data.status === 'success') {
+        alert(`Success! Room booked.\nBooking date: ${data.currentDate}\nReserved until: ${data.checkoutDate}`);
+        fetchRooms();
+    } else {
+        alert(data.message);
+    }
+})
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error booking room. Please try again.');
+      });
+    });
+
+    fetchRooms();
+  </script>
+
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3589.7089669852858!2d29.2317063!3d-25.879054399999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1eeaed25de257ab3%3A0xad1c6a88b48f0b4b!2sWitbank%20Student%20accommodation!5e0!3m2!1sen!2sza!4v1745844761253!5m2!1sen!2sza"
+    width="100%"
+    height="450"
+    style="border:0;"
+    allowfullscreen=""
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
+
+  <div class="footer">
+    <p>© 2025 Building 54 Residence | All Rights Reserved</p>
+    <small>Designed by Your Team Name</small>
+  </div>
+
+</body>
+</html>
